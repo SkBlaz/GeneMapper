@@ -17,6 +17,25 @@ class misc(object):
         output = np.genfromtxt(nameoffile, delimiter=',')
         return output
     def display(self, data, candidates, fname, display):
+        
+        finallist=[]
+        for c in candidates:
+            finallist.append(c[0])
+        #print finallist
+        part1 = finallist[:len(finallist)/2]
+        part2 = finallist[len(finallist)/2:]
+        
+        meandiff=int(np.sqrt(np.power(np.mean(part2),2)-np.power(np.mean(part1),2)))
+        rangeA = max(part1)-min(part1)
+        rangeB = max(part2)-min(part2)
+        span = int((rangeA+rangeB)/2)
+        dspan = int(meandiff/span)
+        oneortwo=""
+        if dspan >3 and meandiff > 20 or meandiff>40:
+            oneortwo = "Two distributions \n MD: %d Span: %d Dspan: %d" % (meandiff, span, dspan) 
+        else:
+            oneortwo = "One distribution \n MD: %d Span: %d Dspan: %d" % (meandiff, span, dspan) 
+
         cans = np.array(candidates)
         plt.plot(cans[:,0],cans[:,1],'ro')
         plt.axhline(max(cans[:,1])/4, color='r')
@@ -26,7 +45,8 @@ class misc(object):
         plt.legend(handles=[red_patch])
         plt.ylabel('Frequency of occurence')
         plt.xlabel('separate items')
-        plt.title('Frequency distribution estimation graph')
+        plt.title('Frequency distribution estimation graph: %s' %(fname))
+        plt.text(max(data)*0.64, max(cans[:,1])*0.62, oneortwo, fontsize = 11, color = 'r')
         plt.hist(data,range(int(min(data)),int(max(data)),1))
         ofile = fname[0:-3]+"png"
         print ("Writing outfile: %s") % (ofile)
@@ -86,20 +106,22 @@ class misc(object):
         part1 = finallist[:len(finallist)/2]
         part2 = finallist[len(finallist)/2:]
         
-        meandiff=np.sqrt(np.power(np.mean(part2),2)-np.power(np.mean(part1),2))
+        meandiff= int(np.sqrt(np.power(np.mean(part2),2)-np.power(np.mean(part1),2)))
         rangeA = max(part1)-min(part1)
         rangeB = max(part2)-min(part2)
+        span = int((rangeA+rangeB)/2)
+        dspan = int(meandiff/span)
 
-        if meandiff> rangeA or meandiff> rangeB:
+        oneortwo = ""
+
+        if meandiff>20 and dspan>5 or meandiff >40 :
             print ("Comparing deviations..")
             print ("left|right: %d | %d"%(np.std(part1),np.std(part2)))     
             print ("Frequency quartile distribution")
             print(">25 percent: %d | >50 percent: %d | >75 percent: %d" % (count25,count50,count75))
             print ("Range difference A: %d\nRange difference B: %d\nDistribution distance: %d" % (rangeA,rangeB, meandiff))
-            span = (rangeA+rangeB)/2
-            dspan = meandiff/span
-            
-            print ("\nResults indicate two different distributions! Span: %d" % (dspan))
+            oneortwo = "Two distributions "   + "dspan: "+str(dspan) +"Mean difference:"+ str(meandiff)
+            print ("\nResults indicate two different distributions! \n %s" % (oneortwo))
         else:
             print ("Comparing deviations..")
             print ("left|right: %d | %d"%(np.std(part1),np.std(part2)))     
@@ -107,10 +129,10 @@ class misc(object):
             print(">25 percent: %d | >50 percent: %d | >75 percent: %d" % (count25,count50,count75))
             print (" Range difference A: %d\n Range difference B: %d\n Distribution distance: %d" % (rangeA,rangeB, meandiff))
             print ("\nResults indicate only one distribution!")
-            span = (rangeA+rangeB)/2
-            dspan = meandiff/span
+            oneortwo = "One distribution "   + "dspan: "+str(dspan) +"Mean difference:"+ str(meandiff)
             
-            print ("\nResults indicate two different distributions! Span: %d" % (dspan))
+            print ("\nResults indicate one distribution! \n  %s" % (oneortwo))
+
         return candidates
         
                 
@@ -134,7 +156,7 @@ if __name__ == '__main__':
         else:
             show=False
             misc().display(data,candidates, filename, show)        
-else:
+    else:
         data = misc().getdata(filename)
         candidates = misc().keyalgo(misc().keypoints(data))
     
