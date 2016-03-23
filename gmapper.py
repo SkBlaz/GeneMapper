@@ -32,7 +32,7 @@ class misc(object):
         dspan = int(meandiff/span)
         theta = float(meandiff/(rangeA+rangeB))
         oneortwo=""
-        if dspan >3 and meandiff > 20 or meandiff>40:
+        if dspan >3 and meandiff > 20 or meandiff>36:
             oneortwo = "Two distributions \n\n MD: %d \n Span: %d \n Dspan: %d \n theta: %d" % (meandiff, span, dspan, theta) 
         else:
             oneortwo = "One distribution \n\n MD: %d \n Span: %d \n Dspan: %d \n theta: %d" % (meandiff, span, dspan, theta)
@@ -116,7 +116,7 @@ class misc(object):
 
         oneortwo = ""
 
-        if meandiff>20 and dspan>5 or meandiff >40 :
+        if meandiff>20 and dspan>5 or meandiff >36 :
             print ("Comparing deviations..")
             print ("left|right: %d | %d"%(np.std(part1),np.std(part2)))     
             print ("Frequency quartile distribution")
@@ -132,7 +132,7 @@ class misc(object):
             print(">25 percent: %d | >50 percent: %d | >75 percent: %d" % (count25,count50,count75))
             print (" Range difference A: %d\n Range difference B: %d\n Distribution distance: %d" % (rangeA,rangeB, meandiff))
             print ("\nResults indicate only one distribution!")
-            oneortwo = "One distribution "   + "dspan: "+str(dspan) +"Mean difference:"+ str(meandiff)
+            oneortwo = "One distribution "   + "dspan: "+str(dspan) +" Mean difference:"+ str(meandiff)
             print ("\nResults indicate one distribution! \n  %s" % (oneortwo))
             print ("theta value:  %d ")% (theta)
 
