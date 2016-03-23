@@ -30,11 +30,12 @@ class misc(object):
         rangeB = max(part2)-min(part2)
         span = int((rangeA+rangeB)/2)
         dspan = int(meandiff/span)
+        theta = float(meandiff/(rangeA+rangeB))
         oneortwo=""
         if dspan >3 and meandiff > 20 or meandiff>40:
-            oneortwo = "Two distributions \n MD: %d Span: %d Dspan: %d" % (meandiff, span, dspan) 
+            oneortwo = "Two distributions \n\n MD: %d \n Span: %d \n Dspan: %d \n theta: %d" % (meandiff, span, dspan, theta) 
         else:
-            oneortwo = "One distribution \n MD: %d Span: %d Dspan: %d" % (meandiff, span, dspan) 
+            oneortwo = "One distribution \n\n MD: %d \n Span: %d \n Dspan: %d \n theta: %d" % (meandiff, span, dspan, theta)
 
         cans = np.array(candidates)
         plt.plot(cans[:,0],cans[:,1],'ro')
@@ -46,7 +47,7 @@ class misc(object):
         plt.ylabel('Frequency of occurence')
         plt.xlabel('separate items')
         plt.title('Frequency distribution estimation graph: %s' %(fname))
-        plt.text(max(data)*0.64, max(cans[:,1])*0.62, oneortwo, fontsize = 11, color = 'r')
+        plt.text(max(data)*1.1, max(cans[:,1])*0.62, oneortwo, fontsize = 11, color = 'r')
         plt.hist(data,range(int(min(data)),int(max(data)),1))
         ofile = fname[0:-3]+"png"
         print ("Writing outfile: %s") % (ofile)
@@ -111,6 +112,7 @@ class misc(object):
         rangeB = max(part2)-min(part2)
         span = int((rangeA+rangeB)/2)
         dspan = int(meandiff/span)
+        theta = float(meandiff/(rangeA+rangeB))
 
         oneortwo = ""
 
@@ -122,6 +124,7 @@ class misc(object):
             print ("Range difference A: %d\nRange difference B: %d\nDistribution distance: %d" % (rangeA,rangeB, meandiff))
             oneortwo = "Two distributions "   + "dspan: "+str(dspan) +"Mean difference:"+ str(meandiff)
             print ("\nResults indicate two different distributions! \n %s" % (oneortwo))
+            print ("theta value:  %d ")% (theta)      
         else:
             print ("Comparing deviations..")
             print ("left|right: %d | %d"%(np.std(part1),np.std(part2)))     
@@ -130,8 +133,9 @@ class misc(object):
             print (" Range difference A: %d\n Range difference B: %d\n Distribution distance: %d" % (rangeA,rangeB, meandiff))
             print ("\nResults indicate only one distribution!")
             oneortwo = "One distribution "   + "dspan: "+str(dspan) +"Mean difference:"+ str(meandiff)
-            
             print ("\nResults indicate one distribution! \n  %s" % (oneortwo))
+            print ("theta value:  %d ")% (theta)
+
 
         return candidates
         
